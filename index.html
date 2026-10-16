@@ -1,1 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Syntax & Concepts Revision Quiz</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --correct-bg: rgba(16, 185, 129, 0.15);
+      --correct-border: #10b981;
+      --correct-text: #6ee7b7;
+      --wrong-bg: rgba(239, 68, 68, 0.15);
+      --wrong-border: #ef4444;
+      --wrong-text: #fca5a5;
+      --code-bg: #0b1120;
+      --code-border: #1e293b;
+      --code-text: #e2e8f0;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 820px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 1.85rem;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Category View */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    @media (min-width: 640px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .cat-btn {
+      background-color: #243042;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px 16px;
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cat-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background-color: #2e3e55;
+    }
+
+    .cat-btn h3 {
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .badge-easy { color: #4ade80; }
+    .badge-med { color: #facc15; }
+    .badge-hard { color: #f87171; }
+
+    .cat-btn p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      pointer-events: none;
+    }
+
+    /* Quiz View */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .prog-badge {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .question-concept {
+      display: inline-block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      line-height: 1.55;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+
+    .snippet-prompt {
+      background-color: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      color: var(--code-text);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .opt-btn {
+      background-color: #243042;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text-main);
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      line-height: 1.4;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background-color: #334155;
+      border-color: #475569;
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-btn.correct {
+      background-color: var(--correct-bg) !important;
+      border-color: var(--correct-border) !important;
+      color: var(--correct-text);
+    }
+
+    .opt-btn.wrong {
+      background-color: var(--wrong-bg) !important;
+      border-color: var(--wrong-border) !important;
+      color: var(--wrong-text);
+    }
+
+    /* Explanation Box with Program Snippets */
+    .explanation-box {
+      display: none;
+      background-color: #111c2e;
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 20px;
+      animation: fadeIn 0.25s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .explanation-box h4 {
+      font-size: 0.92rem;
+      color: var(--accent);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .explanation-box p {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      color: #cbd5e1;
+    }
+
+    .ref-header {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ref-tag {
+      font-size: 0.78rem;
+      background-color: #1e293b;
+      border: 1px solid #475569;
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .code-snippet {
+      background-color: var(--code-bg);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82rem;
+      color: #93c5fd;
+      white-space: pre-wrap;
+      line-height: 1.45;
+      overflow-x: auto;
+    }
+
+    .action-btn {
+      background-color: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      float: right;
+      transition: background-color 0.15s ease;
+    }
+
+    .action-btn:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .clear-float {
+      clear: both;
+    }
+
+    /* Score View */
+    .score-summary {
+      text-align: center;
+      padding: 16px 0 24px;
+    }
+
+    .score-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      background-color: #111c2e;
+    }
+
+    .score-circle .score-num {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .score-circle .score-denom {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .score-summary h2 {
+      font-size: 1.4rem;
+      margin-bottom: 6px;
+    }
+
+    .score-summary p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .mistakes-container {
+      margin-top: 24px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 20px;
+    }
+
+    .mistakes-container h3 {
+      font-size: 1.15rem;
+      color: #f87171;
+      margin-bottom: 14px;
+    }
+
+    .mistake-item {
+      background-color: #172033;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .mistake-q {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .mistake-ans {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+
+    .mistake-exp {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      border-top: 1px dashed #334155;
+      padding-top: 8px;
+      line-height: 1.45;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .btn-secondary:hover {
+      background-color: #334155;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Java Concepts Revision Quiz</h1>
+    <p>Test fundamental Java concepts with real reference snippets from your study programs</p>
+  </header>
+
+  <!-- Category Selection View -->
+  <div id="category-view" class="card">
+    <h2>Select Difficulty Level</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">Each test includes 15 application-based MCQs scored out of 15.</p>
+    
+    <div class="grid">
+      <button class="cat-btn" data-category="easy">
+        <h3>Easy <span class="badge-easy">●</span></h3>
+        <p>Variable declarations, basic operators (+, -, *), simple print concatenation, Scanner imports, and direct while conditions.</p>
+      </button>
+
+      <button class="cat-btn" data-category="medium">
+        <h3>Medium <span class="badge-med">●</span></h3>
+        <p>Integer division truncation, modulo remainder logic, compound conditions (&&), method invocation, and loop boundary conditions.</p>
+      </button>
+
+      <button class="cat-btn" data-category="hard">
+        <h3>Hard <span class="badge-hard">●</span></h3>
+        <p>Double increment tracing, nested loop logic, Scanner input mismatch exceptions, floating point division by zero, and variable scoping.</p>
+      </button>
+    </div>
+  </div>
+
+  <!-- Quiz Taking View -->
+  <div id="quiz-view" class="card" style="display: none;">
+    <div class="quiz-meta">
+      <span id="quiz-level" style="text-transform: capitalize; font-weight: 600;"></span>
+      <span class="prog-badge">Question <span id="current-q">1</span> of 15</span>
+    </div>
+
+    <div id="question-concept" class="question-concept"></div>
+    <div id="question-text" class="question-text"></div>
+    <div id="snippet-prompt" class="snippet-prompt" style="display: none;"></div>
+    <div id="options-container" class="options"></div>
+
+    <div id="explanation-box" class="explanation-box">
+      <h4>Explanation</h4>
+      <p id="exp-text"></p>
+      <div class="ref-header">
+        <span>Concept used in program:</span>
+        <span class="ref-tag" id="exp-ref"></span>
+      </div>
+      <div class="code-snippet" id="exp-snippet"></div>
+    </div>
+
+    <div>
+      <button id="next-btn" class="action-btn" style="display: none;">Next</button>
+      <div class="clear-float"></div>
+    </div>
+  </div>
+
+  <!-- Score/Results View -->
+  <div id="results-view" class="card" style="display: none;">
+    <div class="score-summary">
+      <div class="score-circle">
+        <span class="score-num" id="final-score">0</span>
+        <span class="score-denom">/ 15</span>
+      </div>
+      <h2 id="score-title">Test Complete!</h2>
+      <p id="score-msg"></p>
+    </div>
+
+    <div id="mistakes-section" class="mistakes-container" style="display: none;">
+      <h3>Questions to Review (<span id="incorrect-count"></span>)</h3>
+      <div id="mistakes-list"></div>
+    </div>
+
+    <div class="btn-row">
+      <button id="retry-btn" class="action-btn">Retry Category</button>
+      <button id="menu-btn" class="btn-secondary">Choose Another Category</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const quizBank = {
+    easy: [
+      {
+        concept: "Integer Declaration & Addition",
+        q: "What is the output of the following Java snippet?",
+        code: "int x = 15, y = 25, z;\nz = x + y;\nSystem.out.println(\"Sum = \" + z);",
+        options: ["Sum = 40", "Sum = 1525", "Sum = z", "Compilation error"],
+        answer: 0,
+        explanation: "x and y are integers; '+' adds their numerical values (15 + 25 = 40). In System.out.println, '+' concatenates the string with the computed number.",
+        ref: "01 addition.java",
+        snippet: "int a=10, b=20, c;\nc = a + b;\nSystem.out.println(\"total = \"+c);"
+      },
+      {
+        concept: "Arithmetic Subtraction",
+        q: "What will be printed when this snippet runs?",
+        code: "int p = 5, q = 12;\nint diff = p - q;\nSystem.out.println(\"Result = \" + diff);",
+        options: ["Result = 7", "Result = -7", "Result = 17", "Result = -12"],
+        answer: 1,
+        explanation: "5 - 12 evaluates to negative 7 (-7) in Java signed integer arithmetic.",
+        ref: "02 subtraction.java",
+        snippet: "int a=10, b=20, c;\nc = a-b;\nSystem.out.println(\"Difference =\"+c);"
+      },
+      {
+        concept: "Multiplication Operator",
+        q: "Which operator is required in Java to calculate the product of length and width?",
+        code: "int length = 8, width = 4;\nint area = length _____ width;",
+        options: ["x", "X", "*", "^"],
+        answer: 2,
+        explanation: "Java uses the asterisk '*' for multiplication. The symbol 'x' is an identifier and '^' is the bitwise XOR operator.",
+        ref: "03 multiplication.java",
+        snippet: "int a=10, b=20, c;\nc=a*b;\nSystem.out.println(\"Product = \"+c);"
+      },
+      {
+        concept: "Scanner Class Import",
+        q: "To read keyboard input using `new Scanner(System.in)`, which import statement must appear at the top of the file?",
+        code: null,
+        options: ["import java.io.Scanner;", "import java.util.Scanner;", "import java.awt.Scanner;", "import java.lang.Scanner;"],
+        answer: 1,
+        explanation: "Scanner belongs to the `java.util` package.",
+        ref: "04 division",
+        snippet: "import java.util.Scanner;\nclass division {\n    ...\n    Scanner sc = new Scanner(System.in);"
+      },
+      {
+        concept: "Floating-Point Data Types",
+        q: "Which primitive data type is best suited for storing decimal values like 3.1415 or 85.75 without automatic integer truncation?",
+        code: null,
+        options: ["int", "double", "long", "short"],
+        answer: 1,
+        explanation: "'double' (or 'float') represents 64-bit IEEE 754 floating-point decimals, whereas 'int' truncates fractional components.",
+        ref: "05 SDT speed distance time",
+        snippet: "double dis = sc.nextDouble();\ndouble tm = sc.nextDouble();\ndouble sp = dis/tm;"
+      },
+      {
+        concept: "Reading User Input",
+        q: "Assuming `Scanner input = new Scanner(System.in);`, which method correctly reads a single whole integer?",
+        code: null,
+        options: ["input.nextInteger()", "input.nextInt()", "input.readInt()", "input.getInt()"],
+        answer: 1,
+        explanation: "Scanner's standard method to scan the next token as an integer is `nextInt()`.",
+        ref: "07 MajorMinor",
+        snippet: "Scanner sc = new Scanner(System.in);\nint age = sc.nextInt();"
+      },
+      {
+        concept: "Strict Less-Than Operator",
+        q: "What is printed if `marks = 40`?",
+        code: "if (marks < 40) {\n    System.out.println(\"Retake\");\n} else {\n    System.out.println(\"Pass\");\n}",
+        options: ["Retake", "Pass", "Retake Pass", "Nothing"],
+        answer: 1,
+        explanation: "The condition `marks < 40` evaluates whether marks is strictly less than 40. 40 is not less than 40, so it jumps to the else branch ('Pass').",
+        ref: "07 MajorMinor",
+        snippet: "if (age < 18) {\n    System.out.println(\"Minor\");\n} else {\n    System.out.println(\"Major\");\n}"
+      },
+      {
+        concept: "Modulo Remainder Operator",
+        q: "What does the modulo expression `14 % 4` evaluate to in Java?",
+        options: ["3", "2", "3.5", "0"],
+        answer: 1,
+        explanation: "14 divided by 4 equals 3 with a remainder of 2. The % operator returns the remainder (2).",
+        ref: "08 EvenOdd",
+        snippet: "if (num % 2 == 0) {\n    System.out.println(\"Even number\");\n}"
+      },
+      {
+        concept: "Static Method Call",
+        q: "If method `greet()` is declared as `public static void greet()` inside class `Helper`, how is it called from another class?",
+        code: null,
+        options: ["Helper.greet();", "Helper->greet();", "greet.Helper();", "call Helper.greet();"],
+        answer: 0,
+        explanation: "In Java, static methods are invoked using the class name dot method name: `ClassName.methodName()`.",
+        ref: "06 Menu",
+        snippet: "if (choice == 1) {\n    addition.calc();\n} else if (choice == 2) {\n    subtraction.calc();\n}"
+      },
+      {
+        concept: "Basic While Loop Initialization",
+        q: "How many times does this while loop execute?",
+        code: "int k = 1;\nwhile (k <= 4) {\n    System.out.println(\"Java\");\n    k = k + 1;\n}",
+        options: ["3 times", "4 times", "5 times", "Infinite"],
+        answer: 1,
+        explanation: "k starts at 1 and increments by 1: executes for k = 1, 2, 3, 4 (4 iterations) and stops when k = 5.",
+        ref: "10 WhileLoop",
+        snippet: "int counter = 1;\nwhile (counter <= 5) {\n    System.out.println(\"Christine\");\n    ...\n}"
+      },
+      {
+        concept: "Accumulator Variable Pattern",
+        q: "What is the result stored in `total` after the loop terminates?",
+        code: "int total = 0;\nint i = 1;\nwhile (i <= 3) {\n    total = total + i;\n    i++;\n}",
+        options: ["3", "5", "6", "0"],
+        answer: 2,
+        explanation: "Initial total = 0. Iteration 1: total = 0 + 1 = 1. Iteration 2: total = 1 + 2 = 3. Iteration 3: total = 3 + 3 = 6.",
+        ref: "13 SumOfNumbers",
+        snippet: "int sum = 0;\nint ctr = 1;\nwhile (ctr <= 5) {\n    sum = sum + ctr;\n    ctr++;\n}"
+      },
+      {
+        concept: "Post-Increment Operator",
+        q: "What does `count++;` do in Java?",
+        options: ["Adds 2 to count", "Increments count by 1", "Squares count", "Multiplies count by 10"],
+        answer: 1,
+        explanation: "`count++` is shorthand for `count = count + 1`.",
+        ref: "12 While-If",
+        snippet: "int counter = 1;\nwhile (counter <= 3) {\n    System.out.println(\"Hello\");\n    counter++;\n}"
+      },
+      {
+        concept: "Reading Decimals with Scanner",
+        q: "Which Scanner method is used to read user input into a `double` variable?",
+        code: null,
+        options: ["sc.readDouble()", "sc.nextDouble()", "sc.nextFloat()", "sc.getDouble()"],
+        answer: 1,
+        explanation: "`nextDouble()` parses the next user input token as a double value.",
+        ref: "05 SDT speed distance time",
+        snippet: "System.out.print(\"Enter the distance:\");\ndouble dis = sc.nextDouble();"
+      },
+      {
+        concept: "String Concatenation",
+        q: "What does `\"Score: \" + 10 + 5` evaluate to in `System.out.println`?",
+        code: null,
+        options: ["Score: 15", "Score: 105", "Score: 50", "Compilation error"],
+        answer: 1,
+        explanation: "Left-to-right evaluation starts with string concatenation: 'Score: ' + 10 produces 'Score: 10', which is then concatenated with 5 to yield 'Score: 105'.",
+        ref: "11 WhileLoopUserInput",
+        snippet: "System.out.println(num + \" x \" + counter + \"=\" + (num*counter));"
+      },
+      {
+        concept: "If-Else Syntax",
+        q: "Which keyword introduces a fallback branch when all prior `if` and `else if` conditions test false?",
+        code: null,
+        options: ["default", "else", "otherwise", "catch"],
+        answer: 1,
+        explanation: "In an if/else-if statement tree, the final fallback is declared with the `else` block.",
+        ref: "06 Menu",
+        snippet: "if (choice == 1) {\n    ...\n} else if (choice == 2) {\n    ...\n} else {\n    System.out.println(\"Invalid input\");\n}"
+      }
+    ],
+    medium: [
+      {
+        concept: "Integer Division Truncation",
+        q: "What is the value of `result` in this code?",
+        code: "int a = 19;\nint b = 4;\nint result = a / b;\nSystem.out.println(result);",
+        options: ["4.75", "4", "5", "0"],
+        answer: 1,
+        explanation: "When both operands are integers, Java performs integer division, discarding all decimals (19 / 4 = 4).",
+        ref: "04 division",
+        snippet: "// notes:\n// (1) integer division = quotient only\nc = a / b;\nSystem.out.print(\"Quotient = \"+c);"
+      },
+      {
+        concept: "Even Number Testing",
+        q: "Which expression evaluates to `true` if variable `val` holds an odd integer (e.g., 3, 7, 11)?",
+        code: null,
+        options: ["val % 2 == 0", "val % 2 != 0", "val / 2 == 1", "val % 10 == 0"],
+        answer: 1,
+        explanation: "Dividing an odd number by 2 yields a remainder of 1 or -1 (not equal to 0: `val % 2 != 0`).",
+        ref: "08 EvenOdd",
+        snippet: "if (num % 2 == 0) {\n    System.out.println(\"Even number\");\n} else {\n    System.out.println(\"Odd number\");\n}"
+      },
+      {
+        concept: "Logical AND (&&) Short-Circuit",
+        q: "Under what condition will the body of this `if` statement execute?",
+        code: "if (x > 10 && x < 50) {\n    System.out.println(\"In range\");\n}",
+        options: [
+          "When x is greater than 10, regardless of 50",
+          "Only when x is strictly between 11 and 49 inclusive",
+          "When x is any number except 10 or 50",
+          "When either x > 10 or x < 50 is true"
+        ],
+        answer: 1,
+        explanation: "Logical `&&` requires both the left condition (`x > 10`) AND the right condition (`x < 50`) to be true.",
+        ref: "09 Greatest",
+        snippet: "if (a>b && a>c) {\n    System.out.println(a);\n} else if (b>a && b>c) {\n    System.out.println(b);\n}"
+      },
+      {
+        concept: "Cascading If-Else Matching",
+        q: "What will this code print for `score = 75`?",
+        code: "if (score >= 90) {\n    System.out.println(\"A\");\n} else if (score >= 70) {\n    System.out.println(\"B\");\n} else if (score >= 50) {\n    System.out.println(\"C\");\n} else {\n    System.out.println(\"F\");\n}",
+        options: ["A", "B", "B and C", "C"],
+        answer: 1,
+        explanation: "Execution stops at the very first branch whose condition is true. Since 75 >= 90 is false but 75 >= 70 is true, 'B' is printed.",
+        ref: "06 Menu",
+        snippet: "if (choice == 1) {\n    addition.calc();\n} else if (choice == 2) {\n    subtraction.calc();\n} else if (choice == 3) {\n    multiplication.calc();\n}"
+      },
+      {
+        concept: "Parentheses in Expressions",
+        q: "What is printed by this line?",
+        code: "int val = 5;\nSystem.out.println(\"Answer = \" + (val * 3));",
+        options: ["Answer = 15", "Answer = 5 * 3", "Answer = 53", "Compilation error"],
+        answer: 0,
+        explanation: "Parentheses force the multiplication `(val * 3)` to be computed first (5 * 3 = 15), and the result is concatenated with 'Answer = '.",
+        ref: "11 WhileLoopUserInput",
+        snippet: "System.out.println(num + \" x \" + counter + \"=\" + (num*counter));"
+      },
+      {
+        concept: "Loop Boundary Tracing",
+        q: "How many times does this loop print the greeting?",
+        code: "int step = 0;\nwhile (step <= 5) {\n    System.out.println(\"Hi\");\n    step++;\n}",
+        options: ["5 times", "6 times", "4 times", "Infinite"],
+        answer: 1,
+        explanation: "Because step starts at 0 and the condition is `<= 5`, it runs for values: 0, 1, 2, 3, 4, 5 (6 iterations total).",
+        ref: "10 WhileLoop",
+        snippet: "// option 1\n// int counter = 0\n// while (counter <= 4)"
+      },
+      {
+        concept: "Integer Division by Zero",
+        q: "What happens when executing `int result = 50 / 0;` in Java?",
+        code: null,
+        options: [
+          "Result becomes 0",
+          "Result becomes Infinity",
+          "Throws ArithmeticException: / by zero at runtime",
+          "It automatically prints NaN"
+        ],
+        answer: 2,
+        explanation: "Integer division by zero is illegal in Java and causes an `ArithmeticException: / by zero` at runtime.",
+        ref: "04 division",
+        snippet: "// notes:\n// (3) what happens if divide by 0? → throws exception\nc = a / b;"
+      },
+      {
+        concept: "Double Precision Division",
+        q: "What is the output of this code?",
+        code: "double d = 7.0;\ndouble t = 2.0;\nSystem.out.println(d / t);",
+        options: ["3", "3.5", "3.0", "4"],
+        answer: 1,
+        explanation: "Floating-point division preserves fractions; 7.0 / 2.0 evaluates to 3.5.",
+        ref: "05 SDT speed distance time",
+        snippet: "double sp = dis/tm;\nSystem.out.println(\"Speed = \"+sp);"
+      },
+      {
+        concept: "Strict Comparison Pitfall",
+        q: "What is printed if `x = 20, y = 20, z = 10` in this structure?",
+        code: "if (x > y && x > z) {\n    System.out.println(\"X is largest\");\n} else if (y > x && y > z) {\n    System.out.println(\"Y is largest\");\n} else {\n    System.out.println(\"No unique largest\");\n}",
+        options: ["X is largest", "Y is largest", "No unique largest", "Compilation error"],
+        answer: 2,
+        explanation: "Since x equals y, `x > y` is false (20 > 20 is false) and `y > x` is also false. Control drops into the `else` block.",
+        ref: "09 Greatest",
+        snippet: "if (a>b && a>c) {\n    ...\n} else if (c>a && c>b) {\n    ...\n} else {\n    System.out.println(\"None are greatest.\");\n}"
+      },
+      {
+        concept: "Loop Inversion Check",
+        q: "What is the output of this snippet?",
+        code: "int num = 4;\nwhile (num > 1) {\n    System.out.print(num + \" \");\n    num--;\n}",
+        options: ["4 3 2 1 ", "4 3 2 ", "3 2 1 ", "4 3 "],
+        answer: 1,
+        explanation: "Executes for num = 4, 3, 2. When num decrements to 1, `1 > 1` is false and the loop terminates.",
+        ref: "10 WhileLoop",
+        snippet: "int counter = 1;\nwhile (counter <= 5) {\n    ...\n    counter = counter + 1;\n}"
+      },
+      {
+        concept: "Pre vs Post Execution in Loop",
+        q: "What does this loop print?",
+        code: "int n = 1;\nwhile (n <= 3) {\n    n++;\n    System.out.print(n + \" \");\n}",
+        options: ["1 2 3 ", "2 3 4 ", "2 3 ", "1 2 3 4 "],
+        answer: 1,
+        explanation: "n is incremented before being printed: n becomes 2 and prints 2; then 3 and prints 3; then 4 and prints 4.",
+        ref: "10 WhileLoop",
+        snippet: "while (counter <= 5) {\n    ...\n    counter = counter + 1;\n    System.out.println(counter);\n    counter = counter + 1;\n}"
+      },
+      {
+        concept: "Accumulator Calculation",
+        q: "What is the final value of `product`?",
+        code: "int product = 1;\nint k = 1;\nwhile (k <= 4) {\n    product = product * k;\n    k++;\n}",
+        options: ["10", "24", "12", "4"],
+        answer: 1,
+        explanation: "Calculates factorial of 4: 1 * 1 * 2 * 3 * 4 = 24.",
+        ref: "13 SumOfNumbers",
+        snippet: "int sum = 0;\nint ctr = 1;\nwhile (ctr <= 5) {\n    sum = sum + ctr;\n    ctr++;\n}"
+      },
+      {
+        concept: "Order of Evaluation with Modulo",
+        q: "What is the result of `10 + 6 % 4` in Java?",
+        code: null,
+        options: ["0", "12", "14", "2"],
+        answer: 1,
+        explanation: "Modulo `%` has higher operator precedence than addition `+`. `6 % 4` is evaluated first (= 2), then `10 + 2` = 12.",
+        ref: "08 EvenOdd",
+        snippet: "if (num % 2 == 0) {\n    System.out.println(\"Even number\");\n}"
+      },
+      {
+        concept: "Method Call Execution Flow",
+        q: "In Java, when `methodA()` calls `methodB()`, what happens to `methodA()`?",
+        code: null,
+        options: [
+          "It terminates immediately and never resumes",
+          "It waits paused until methodB() returns, then continues",
+          "It executes concurrently in background",
+          "It resets all of its local variables"
+        ],
+        answer: 1,
+        explanation: "Method execution in Java is synchronous; callers pause on the call stack until the invoked method finishes.",
+        ref: "06 Menu",
+        snippet: "if (choice == 1) {\n    addition.calc();\n}\n// control returns here after calc() completes"
+      },
+      {
+        concept: "Floating Point Input Handling",
+        q: "If a user inputs '42.8' into `sc.nextDouble()`, what happens?",
+        code: null,
+        options: [
+          "It throws an exception",
+          "It successfully reads 42.8 into the double variable",
+          "It automatically truncates to 42",
+          "It converts the value to 0"
+        ],
+        answer: 1,
+        explanation: "`sc.nextDouble()` parses decimal input according to floating-point formatting rules.",
+        ref: "05 SDT speed distance time",
+        snippet: "double sp = sc.nextDouble();\ndouble tm = sc.nextDouble();\ndouble dis = sp * tm;"
+      }
+    ],
+    hard: [
+      {
+        concept: "Double Increment Inside Loop",
+        q: "How many times does this while loop print 'Tick'?",
+        code: "int val = 1;\nwhile (val <= 6) {\n    System.out.println(\"Tick\");\n    val = val + 1;\n    val = val + 1;\n}",
+        options: ["6 times", "3 times", "4 times", "2 times"],
+        answer: 1,
+        explanation: "In each iteration, `val` increases by 2. Iteration 1: val starts at 1, increments to 3. Iteration 2: val starts at 3, increments to 5. Iteration 3: val starts at 5, increments to 7. 7 <= 6 is false, so it runs exactly 3 times.",
+        ref: "10 WhileLoop",
+        snippet: "while (counter <= 5) {\n    System.out.println(\"Christine\");\n    counter = counter + 1;\n    System.out.println(counter);\n    counter = counter + 1;\n}"
+      },
+      {
+        concept: "Post-Loop Variable Value",
+        q: "What is the value of `ctr` immediately after this loop terminates?",
+        code: "int ctr = 1;\nwhile (ctr <= 5) {\n    ctr = ctr + 2;\n}",
+        options: ["5", "6", "7", "8"],
+        answer: 2,
+        explanation: "Start: ctr = 1. Iteration 1: ctr becomes 3. Iteration 2: ctr becomes 5. Iteration 3: ctr becomes 7. The check `7 <= 5` fails, terminating the loop with ctr = 7.",
+        ref: "10 WhileLoop",
+        snippet: "// Loop counter progresses past boundary\nwhile (counter <= 5) {\n    counter = counter + 1;\n    ...\n    counter = counter + 1;\n}"
+      },
+      {
+        concept: "Nested While Loop Output Count",
+        q: "What is the total number of lines printed by this program?",
+        code: "int i = 1;\nwhile (i <= 4) {\n    if (i == 2) {\n        int inner = 1;\n        while (inner <= 3) {\n            System.out.println(\"Inner\");\n            inner++;\n        }\n    } else {\n        System.out.println(i);\n    }\n    i++;\n}",
+        options: ["4 lines", "6 lines", "7 lines", "8 lines"],
+        answer: 1,
+        explanation: "For i = 1, 3, 4: the else block prints the number (3 lines). For i = 2: the nested while loop prints 'Inner' 3 times (3 lines). Total = 3 + 3 = 6 printed lines.",
+        ref: "12 While-If",
+        snippet: "if (ctr == 5) {\n    int counter = 1;\n    while (counter <=3) {\n        System.out.println(\"Hello\");\n        counter++;\n    }\n} else {\n    System.out.println(ctr);\n}"
+      },
+      {
+        concept: "Branch Bypass in Nested Flow",
+        q: "In a structure like '12 While-If', when the conditional `if (ctr == 5)` triggers, what happens to the output for number 5?",
+        code: null,
+        options: [
+          "5 is printed after the nested loop",
+          "5 is printed before the nested loop",
+          "5 is completely omitted because the else branch is skipped",
+          "5 is printed 3 times"
+        ],
+        answer: 2,
+        explanation: "Because the number printing occurs inside the `else` branch, entering the `if` block bypasses printing the value of 5 completely.",
+        ref: "12 While-If",
+        snippet: "if (ctr == 5) {\n    // Inner loop executes here\n} else {\n    System.out.println(ctr); // Skipped when ctr == 5\n}"
+      },
+      {
+        concept: "InputMismatchException in Scanner",
+        q: "What exception is thrown if a user inputs the string 'seven' or '3.14' when `sc.nextInt()` is expecting an integer?",
+        code: null,
+        options: [
+          "ArithmeticException",
+          "InputMismatchException",
+          "NumberFormatException",
+          "NullPointerException"
+        ],
+        answer: 1,
+        explanation: "When Scanner encounters a token that does not match the integer pattern regex, `sc.nextInt()` throws an `InputMismatchException`.",
+        ref: "04 division",
+        snippet: "// notes:\n// (2) what happens if float fed in? → throws exception\na = sc.nextInt();"
+      },
+      {
+        concept: "Floating-Point Division by Zero",
+        q: "What is printed when executing `System.out.println(15.0 / 0.0);` in Java?",
+        code: null,
+        options: [
+          "Throws ArithmeticException",
+          "Infinity",
+          "NaN",
+          "0.0"
+        ],
+        answer: 1,
+        explanation: "In Java floating-point arithmetic compliant with IEEE 754, non-zero floating-point numbers divided by 0.0 yield 'Infinity' without throwing an exception.",
+        ref: "05 SDT speed distance time",
+        snippet: "double sp = dis/tm;\n// if tm is 0.0, sp becomes Infinity (unlike int division which throws exception)"
+      },
+      {
+        concept: "Scope of Method Local Variables",
+        q: "What happens if code in `class B` tries to access a local variable `int choice` declared inside `class A`'s method?",
+        code: null,
+        options: [
+          "It accesses the value normally",
+          "Compilation error: the variable is out of scope",
+          "It reads the default value 0",
+          "It generates a runtime SecurityException"
+        ],
+        answer: 1,
+        explanation: "Variables declared inside a method have block/local scope and are strictly invisible and inaccessible outside that method.",
+        ref: "06 Menu",
+        snippet: "public static void mainMenu() {\n    Scanner sc = new Scanner(System.in);\n    int choice = sc.nextInt();\n    // 'choice' is destroyed when mainMenu() exits\n}"
+      },
+      {
+        concept: "Top-Level Class Visibility Rules",
+        q: "If a single Java file named `Menu.java` contains classes `Menu`, `addition`, and `subtraction`, which class can be declared `public`?",
+        code: null,
+        options: [
+          "All classes can be public",
+          "Only the class named 'Menu' matching the filename",
+          "Any class chosen by the programmer",
+          "None of the classes can be public"
+        ],
+        answer: 1,
+        explanation: "In Java, at most one top-level class per .java file may be declared `public`, and its name must exactly match the source filename.",
+        ref: "06 Menu",
+        snippet: "// Menu.java\nclass Menu { ... }\nclass addition { ... }\nclass subtraction { ... }"
+      },
+      {
+        concept: "Loop Boundary Inequality",
+        q: "If `while (ctr <= 5)` in an accumulator program is changed to `while (ctr < 5)`, what is the effect on the accumulated sum of numbers 1..5?",
+        code: null,
+        options: [
+          "The sum is unchanged",
+          "The sum is reduced by 5 (sum equals 10 instead of 15)",
+          "The sum is increased by 1",
+          "Causes an infinite loop"
+        ],
+        answer: 1,
+        explanation: "With `< 5`, the loop terminates when ctr = 5 before adding it, summing only 1 + 2 + 3 + 4 = 10.",
+        ref: "13 SumOfNumbers",
+        snippet: "int sum = 0;\nint ctr = 1;\nwhile (ctr <= 5) {\n    sum = sum + ctr;\n    ctr++;\n}"
+      },
+      {
+        concept: "Compound Condition Failure with Duplicates",
+        q: "In an algorithm checking `(a > b && a > c)` for finding the greatest number, what is output when `a = 9, b = 9, c = 4`?",
+        code: "if (a>b && a>c) {\n    System.out.println(a);\n} else if (b>a && b>c) {\n    System.out.println(b);\n} else if (c>a && c>b) {\n    System.out.println(c);\n} else {\n    System.out.println(\"No unique greatest\");\n}",
+        options: ["9", "4", "No unique greatest", "Compilation error"],
+        answer: 2,
+        explanation: "9 > 9 is false, so both `a > b` and `b > a` evaluate to false. None of the `if` branches trigger, resulting in the `else` output.",
+        ref: "09 Greatest",
+        snippet: "if (a>b && a>c) {\n    System.out.println(a);\n} else if (b>a && b>c) {\n    System.out.println(b);\n} else {\n    System.out.println(\"None are greatest.\");\n}"
+      },
+      {
+        concept: "Scanner Resource Sharing",
+        q: "What potential issue occurs if multiple consecutive methods each create a `new Scanner(System.in)` and one executes `sc.close()`?",
+        code: null,
+        options: [
+          "Closing one closes the underlying System.in stream, causing NoSuchElementException in subsequent scanners",
+          "It speeds up subsequent reads",
+          "It resets keyboard input buffer safely",
+          "Java throws a CompilationError"
+        ],
+        answer: 0,
+        explanation: "Closing a Scanner wrapping `System.in` closes the standard input stream for the entire JVM, breaking future input attempts.",
+        ref: "05 SDT speed distance time",
+        snippet: "public static void speed() { Scanner sc = new Scanner(System.in); ... }\npublic static void distance() { Scanner sc = new Scanner(System.in); ... }"
+      },
+      {
+        concept: "Sequential Method Invocations",
+        q: "In `SDT.main()`, what dictates the execution order of `SDT.speed()`, `SDT.distance()`, and `SDT.time()`?",
+        code: null,
+        options: [
+          "They execute asynchronously in parallel",
+          "The chronological order in which they are invoked within the main method",
+          "The alphabetical order of their method names",
+          "Their return types"
+        ],
+        answer: 1,
+        explanation: "Java executes statements sequentially within a thread. The statements inside main() run from top to bottom.",
+        ref: "05 SDT speed distance time",
+        snippet: "public static void main(String[] args) {\n    SDT.speed();\n    SDT.distance();\n    SDT.time();\n}"
+      },
+      {
+        concept: "Loop with Negative User Inputs",
+        q: "If a user enters `-4` into a multiplication table generator running `while (counter <= 10)` with `counter` initialized to 1, what happens?",
+        code: null,
+        options: [
+          "The loop never runs because num is negative",
+          "It produces an infinite loop",
+          "It prints products of -4 (-4, -8, -12 ... -40)",
+          "Throws an ArithmeticException"
+        ],
+        answer: 2,
+        explanation: "The loop condition checks only `counter <= 10`. The negative value of `num` is multiplied as standard arithmetic.",
+        ref: "11 WhileLoopUserInput",
+        snippet: "int counter = 1;\nwhile (counter <= 10) {\n    System.out.println(num + \" x \" + counter + \"=\" + (num*counter));\n    counter = counter + 1;\n}"
+      },
+      {
+        concept: "Double Precision 0.0/0.0",
+        q: "What is the result of floating-point division `0.0 / 0.0` in Java?",
+        code: null,
+        options: ["0.0", "Infinity", "NaN (Not a Number)", "ArithmeticException"],
+        answer: 2,
+        explanation: "In IEEE 754 floating-point standard used by Java, dividing zero by zero produces `NaN` (Not a Number).",
+        ref: "05 SDT speed distance time",
+        snippet: "double sp = dis/tm;\n// If both dis and tm are 0.0, sp evaluates to NaN"
+      },
+      {
+        concept: "Pre-condition While Loop",
+        q: "How many times will this loop body execute?",
+        code: "int val = 10;\nwhile (val < 5) {\n    System.out.println(\"Looping\");\n    val++;\n}",
+        options: ["0 times", "1 time", "5 times", "10 times"],
+        answer: 0,
+        explanation: "A `while` loop checks its boolean condition before entering the body. Since 10 < 5 is initially false, it executes 0 times.",
+        ref: "10 WhileLoop",
+        snippet: "int counter = 1;\nwhile (counter <= 5) {\n    // Condition evaluated prior to entry\n}"
+      }
+    ]
+  };
+
+  let currentCategory = 'easy';
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let incorrectList = [];
+
+  // Bind category button clicks safely
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const category = this.getAttribute('data-category');
+      startQuiz(category);
+    });
+  });
+
+  // Action button listeners
+  document.getElementById('next-btn').addEventListener('click', nextQuestion);
+  document.getElementById('retry-btn').addEventListener('click', () => startQuiz(currentCategory));
+  document.getElementById('menu-btn').addEventListener('click', backToMenu);
+
+  function startQuiz(category) {
+    currentCategory = category;
+    currentQuestionIndex = 0;
+    score = 0;
+    incorrectList = [];
+
+    document.getElementById('category-view').style.display = 'none';
+    document.getElementById('results-view').style.display = 'none';
+    document.getElementById('quiz-view').style.display = 'block';
+    document.getElementById('quiz-level').textContent = category + " Level";
+
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const qData = quizBank[currentCategory][currentQuestionIndex];
+    document.getElementById('current-q').textContent = currentQuestionIndex + 1;
+    document.getElementById('question-concept').textContent = qData.concept;
+    document.getElementById('question-text').textContent = qData.q;
+
+    const snippetPrompt = document.getElementById('snippet-prompt');
+    if (qData.code) {
+      snippetPrompt.textContent = qData.code;
+      snippetPrompt.style.display = 'block';
+    } else {
+      snippetPrompt.style.display = 'none';
+    }
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    qData.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> <span>${escapeHtml(opt)}</span>`;
+      btn.addEventListener('click', () => selectOption(idx));
+      optionsContainer.appendChild(btn);
+    });
+
+    document.getElementById('explanation-box').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+  }
+
+  function selectOption(selectedIdx) {
+    const qData = quizBank[currentCategory][currentQuestionIndex];
+    const buttons = document.querySelectorAll('.opt-btn');
+
+    buttons.forEach(btn => btn.disabled = true);
+
+    const isCorrect = (selectedIdx === qData.answer);
+    if (isCorrect) {
+      buttons[selectedIdx].classList.add('correct');
+      score++;
+    } else {
+      buttons[selectedIdx].classList.add('wrong');
+      buttons[qData.answer].classList.add('correct');
+      incorrectList.push({
+        concept: qData.concept,
+        question: qData.q,
+        codePrompt: qData.code,
+        userAnswer: qData.options[selectedIdx],
+        correctAnswer: qData.options[qData.answer],
+        explanation: qData.explanation,
+        reference: qData.ref,
+        snippet: qData.snippet
+      });
+    }
+
+    document.getElementById('exp-text').textContent = qData.explanation;
+    document.getElementById('exp-ref').textContent = qData.ref;
+    document.getElementById('exp-snippet').textContent = qData.snippet;
+    document.getElementById('explanation-box').style.display = 'block';
+
+    const nextBtn = document.getElementById('next-btn');
+    nextBtn.textContent = (currentQuestionIndex === 14) ? "Finish Test" : "Next Question";
+    nextBtn.style.display = 'block';
+  }
+
+  function nextQuestion() {
+    if (currentQuestionIndex < 14) {
+      currentQuestionIndex++;
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quiz-view').style.display = 'none';
+    document.getElementById('results-view').style.display = 'block';
+
+    document.getElementById('final-score').textContent = score;
+
+    const titleEl = document.getElementById('score-title');
+    const msgEl = document.getElementById('score-msg');
+
+    if (score === 15) {
+      titleEl.textContent = "Outstanding!";
+      msgEl.textContent = "You demonstrated complete mastery over the syntax and mechanics of these Java concepts.";
+    } else if (score >= 10) {
+      titleEl.textContent = "Great Job!";
+      msgEl.textContent = "Solid foundational understanding. Review the explanations and program snippets below.";
+    } else {
+      titleEl.textContent = "Keep Practicing!";
+      msgEl.textContent = "Take time to study the snippets and explanations below to strengthen your understanding.";
+    }
+
+    const mistakesSec = document.getElementById('mistakes-section');
+    const mistakesList = document.getElementById('mistakes-list');
+    mistakesList.innerHTML = '';
+
+    if (incorrectList.length > 0) {
+      mistakesSec.style.display = 'block';
+      document.getElementById('incorrect-count').textContent = incorrectList.length;
+
+      incorrectList.forEach((item, i) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'mistake-item';
+        
+        let codeHtml = item.codePrompt ? `<div class="snippet-prompt" style="margin: 8px 0;">${escapeHtml(item.codePrompt)}</div>` : '';
+        
+        itemDiv.innerHTML = `
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--accent); margin-bottom: 4px;">${escapeHtml(item.concept)}</div>
+          <div class="mistake-q">${i + 1}. ${escapeHtml(item.question)}</div>
+          ${codeHtml}
+          <div class="mistake-ans"><strong style="color:var(--wrong-text);">Your answer:</strong> ${escapeHtml(item.userAnswer)}</div>
+          <div class="mistake-ans"><strong style="color:var(--correct-text);">Correct answer:</strong> ${escapeHtml(item.correctAnswer)}</div>
+          <div class="mistake-exp">
+            <strong>Explanation:</strong> ${escapeHtml(item.explanation)}
+            <div style="margin-top: 6px; font-size: 0.8rem; color: var(--text-muted);">
+              Reference Program: <span class="ref-tag">${escapeHtml(item.reference)}</span>
+            </div>
+            <pre class="code-snippet" style="margin-top: 6px;">${escapeHtml(item.snippet)}</pre>
+          </div>
+        `;
+        mistakesList.appendChild(itemDiv);
+      });
+    } else {
+      mistakesSec.style.display = 'none';
+    }
+  }
+
+  function backToMenu() {
+    document.getElementById('results-view').style.display = 'none';
+    document.getElementById('category-view').style.display = 'block';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+});
+</script>
+
+</body>
+</html>
